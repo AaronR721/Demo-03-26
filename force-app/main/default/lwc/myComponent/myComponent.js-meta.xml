@@ -1,0 +1,16 @@
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="myVariable" type="String" label="My Variable" description="Pass a value in from the builder"/>
+        </targetConfig>
+        <targetConfig targets="lightning__AppPage">
+            <property name="myVariable" type="String" label="My Variable" description="Pass a value in from the builder"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
