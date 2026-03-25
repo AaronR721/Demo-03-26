@@ -1,36 +1,66 @@
+<!--
+    weatherAPI.html
+
+    Template for the Weather Lookup LWC component.
+    Displays a card with City and State inputs, a button to fetch weather,
+    and a results section showing current conditions from WeatherAPI.com.
+
+    Apex Class: WeatherAPI.getWeather(city)
+    JS Controller: weatherAPI.js
+-->
 <template>
+    <!-- lightning-card provides the standard Salesforce card UI wrapper with a title -->
     <lightning-card title="Weather Lookup">
         <div class="slds-p-around_medium">
+
+            <!-- City input — bound to the 'city' property in JS via onchange -->
             <lightning-input
                 label="City"
                 value={city}
                 onchange={handleCityChange}>
             </lightning-input>
+
+            <!-- State input — used alongside city to disambiguate locations
+                 e.g. "Portland, Oregon" vs "Portland, Maine"
+                 slds-m-top_small adds a small top margin to separate it from the City field -->
             <lightning-input
                 label="State"
                 value={state}
                 onchange={handleStateChange}
                 class="slds-m-top_small">
             </lightning-input>
+
+            <!-- Button that triggers the Apex callout to WeatherAPI.com
+                 slds-m-top_medium adds extra spacing above the button -->
             <lightning-button
                 label="Get Weather"
                 onclick={handleGetWeather}
                 class="slds-m-top_medium">
             </lightning-button>
 
+            <!-- Results section — only renders when weatherData is populated.
+                 weatherData is the parsed JSON response from WeatherAPI.com.
+                 location.region returns the full state name (e.g. "Oregon", "Maine")
+                 ensuring the correct city is always displayed. -->
             <template if:true={weatherData}>
                 <div class="slds-m-top_medium">
+                    <!-- Displays City, State, Country to confirm the correct location was returned -->
                     <p><strong>Location:</strong> {weatherData.location.name}, {weatherData.location.region}, {weatherData.location.country}</p>
+                    <!-- Temperature shown in both Fahrenheit and Celsius -->
                     <p><strong>Temperature:</strong> {weatherData.current.temp_f}°F / {weatherData.current.temp_c}°C</p>
+                    <!-- Human-readable weather condition e.g. "Sunny", "Partly Cloudy" -->
                     <p><strong>Condition:</strong> {weatherData.current.condition.text}</p>
                     <p><strong>Humidity:</strong> {weatherData.current.humidity}%</p>
                     <p><strong>Wind:</strong> {weatherData.current.wind_mph} mph</p>
                 </div>
             </template>
 
+            <!-- Error section — only renders if the Apex callout fails.
+                 Displays the error message returned from the server. -->
             <template if:true={error}>
                 <p class="slds-m-top_small slds-text-color_error">{error}</p>
             </template>
+
         </div>
     </lightning-card>
 </template>
